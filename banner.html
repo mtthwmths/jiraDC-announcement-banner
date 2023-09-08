@@ -1,0 +1,167 @@
+<!-- Message Banner -->
+<style>
+    /* consider choosing colors from Atlassian https://atlassian.design/foundations/color */
+    #message-banner a:link {
+        color: #0052CC;
+        background-color: transparent;
+        text-decoration: none;
+    }
+
+    #message-banner a:hover {
+        color: #0065FF;
+        background-color: transparent;
+        text-decoration: underline;
+    }
+
+    #message-banner a:active {
+        color: #0065FF;
+        background-color: transparent;
+        text-decoration: underline;
+    }
+
+    /*this changes the style of the div containing the message*/
+    #message-banner {
+        background-color: #FFF0B3;
+        border: 2px solid #DE350B;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    #message-banner-contents {
+        margin: 3px auto;
+    }
+    
+    #message-banner-buttons {
+        margin-top: 2px;
+    }
+
+    #message-banner-buttons button {
+        background-color: #0747A6;
+        border: none;
+        color: #FFFFFF;
+        padding: 4px 10px;
+        text-align: center;
+        text-decoration: none;
+        cursor: pointer;
+        float: left;    
+    }
+    
+    #message-banner-buttons button:hover {
+        background-color: #0052CC;
+    }   
+
+    #hide-banner-btn-div button{
+        background-color: #DFE1E6;
+        color: #172B4D;
+    }
+
+    #hide-banner-btn-div button:hover {
+        background-color: #C1C7D0;
+    }
+    
+    .banner-bg-btn {
+        width: 60px;
+        padding: 0;
+        margin: 0 auto;
+    }
+
+    .bttn-wpr {
+        display: flex;
+        justify-content: center; /* align horizontal */
+    }
+</style>
+
+
+<div id="message-banner">
+    <div id="message-banner-contents">
+        <div id="message-banner-message">
+            <strong>Reminder:</strong> There will be a Users forum. Teams meeting information
+            can be found on the <a href=https://google.com>Calendar of Events</a>.
+        </div>
+        <div id="message-banner-buttons">
+            <div id="message-banner-btn-wpr" class="bttn-wpr">
+                <div id="hide-banner-btn-div">
+                    <button id="hide-banner-btn">Dismiss (15 min)</button>
+                </div>
+                &nbsp;
+                <div id="message-banner-bg-btn-div">
+                    <button class="banner-bg-btn" data-color="#FFF0B3" data-text="#172B4D">Yellow</button>
+                    <button class="banner-bg-btn" data-color="#FAFBFC" data-text="#172B4D">White</button>
+                    <button class="banner-bg-btn" data-color="#172B4D" data-text="#FFFFFF">Slate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function setCookie(name,value,hours){
+        var expires = "";
+        if (hours) {
+            var date = new Date();
+            date.setTime(date.getTime() + (hours * 3600 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
+    function getCookie(name){
+        var nameEQ = name + "=";
+        var cookies = document.cookie.split(';');
+        for (var i=0; i < cookies.length; i++){
+            var cookie = cookies[i];
+            while (cookie.charAt(0) === ' ') {
+                cookie = cookie.substring(1, cookie.length);
+            }
+            if (cookie.indexOf(nameEQ) === 0) {
+                return cookie.substring(nameEQ.length, cookie.length);
+            }
+        }
+        return null;
+    }
+
+    function changeBackgroundColor() {
+        var bgColor = this.getAttribute('data-color');
+        var txtColor = this.getAttribute('data-text');
+        messageBannerDiv.style.backgroundColor = bgColor;
+        messageBannerDiv.style.color = txtColor;
+        setCookie('messageBannerBg', bgColor, 4);
+        setCookie('messageBannerTxt', txtColor, 4);
+        if (this.getAttribute('data-color') == "#172B4D"){
+            document.querySelector('#message-banner a').style.color = "#B3D4FF";
+            setCookie('messageBannerAtags', "#B3D4FF", 4);
+        }
+        else {
+            document.querySelector('#message-banner a').style.color = "";
+            setCookie('messageBannerAtags', "", 4);
+        }
+    }
+
+    function hideMessageBanner() {
+        setCookie('announcementBannerDisplay', "none", 0.25);
+        announcementBannerDiv.style.display = "none";
+    }
+
+    const messageBannerDiv = document.getElementById("message-banner");
+    const announcementBannerDiv = document.getElementById("announcement-banner");
+    const hide_btn = document.getElementById("hide-banner-btn");
+
+    hide_btn.onclick = hideMessageBanner;
+
+    document.querySelectorAll('.banner-bg-btn').forEach(button => {
+        button.addEventListener('click', changeBackgroundColor);
+    });
+
+    var initialMessageBannerBG = getCookie('messageBannerBg');
+    var initialMessageBannerTxt = getCookie('messageBannerTxt');
+    var initialMessageBannerAtags = getCookie('messageBannerAtags');
+    var initialAnnouncementBannerDisplay = getCookie('announcementBannerDisplay');
+    if (initialMessageBannerBG) {
+        messageBannerDiv.style.backgroundColor = initialMessageBannerBG;
+        messageBannerDiv.style.color = initialMessageBannerTxt;
+        document.querySelector('#message-banner a').style.color = initialMessageBannerAtags;
+    }
+    if (initialAnnouncementBannerDisplay) {
+        announcementBannerDiv.style.display = initialAnnouncementBannerDisplay;
+    }
+</script>
