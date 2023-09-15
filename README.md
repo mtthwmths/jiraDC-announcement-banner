@@ -3,3 +3,5 @@ an example banner for Jira data center that allows for themes and dismissing the
 
 ## how to add an announcement banner
 Please use [Atlassian's documentation for Configuring an announcement banner](https://confluence.atlassian.com/adminjiraserver/configuring-an-announcement-banner-938846985.html)
+
+You will paste the entire [banner.html](banner.html) file into the "Announcement" field
